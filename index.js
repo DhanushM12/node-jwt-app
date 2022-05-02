@@ -26,6 +26,24 @@ app.post('/api/login', (req, res) => {
       });
 })
 
+
+
+// format of token
+// Authorization: Bearer token
+function takeToken(req, res, next){
+    const bearerHeader = req.headers['authorization']; //  Bearer token
+
+    if(typeof bearerHeader !== undefined){
+        const bearer = bearerHeader.split(' ');// array ['bearer', 'token']
+        const bearerToken = bearer[1]; // token
+        req.token = bearerToken;
+        next();
+    }
+    else{
+        res.sendStatus(403);
+    }
+}
+
 app.listen(port, function(err){
     if(err){
         console.log(`Error in running the server : ${err}`);
