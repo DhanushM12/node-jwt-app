@@ -19,13 +19,28 @@ app.post('/api/login', (req, res) => {
         email: 'aug21@gmail.com'
     }
 
-    jwt.sign({user}, 'SECRET_KEY', function(err, token) {
+    jwt.sign({user}, 'SECRET_KEY', { expiresIn: '60s'}, function(err, token) {
         res.json({
             token
         })
       });
 })
 
+
+app.post('/api/verify', takeToken, (req, res) => {
+
+    jwt.verify(req.token, 'SECRET_KEY', function(err, data) {
+        if(err){
+            res.sendStatus(403);
+        }
+        else{
+            res.json({
+                message: 'User access granted',
+                data
+            })
+        }
+    });
+})
 
 
 // format of token
